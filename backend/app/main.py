@@ -80,7 +80,7 @@ class LatestFrameBuffer:
 async def lifespan(app: FastAPI):
     """Load the model on startup, but keep health endpoints available if absent."""
     logger.info("=" * 60)
-    logger.info("  Driver Drowsiness Detection API - starting")
+    logger.info("  Real-Time Fatigue Detection API - starting")
     logger.info("=" * 60)
 
     try:
@@ -100,8 +100,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Drowsiness Detection API",
-    description="Real-time driver drowsiness detection via WebSocket",
+    title="Real-Time Fatigue Detection API",
+    description="Real-time fatigue monitoring via WebSocket",
     version="1.0.0",
     lifespan=lifespan,
 )

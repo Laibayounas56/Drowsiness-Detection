@@ -7,12 +7,12 @@ interface AlertPanelProps {
 
 const MESSAGES: Record<"ALERT" | "CRITICAL", { title: string; body: string }> = {
   ALERT: {
-    title: "Fatigue Warning",
-    body: "Elevated fatigue indicators detected. Consider taking a short break.",
+    title: "Elevated Fatigue Level",
+    body: "Fatigue increasing. Consider taking a short break.",
   },
   CRITICAL: {
-    title: "Critical Fatigue Level",
-    body: "High drowsiness risk detected. Stop driving and rest immediately.",
+    title: "High Fatigue Detected",
+    body: "Severe fatigue detected. Immediate rest is recommended.",
   },
 };
 

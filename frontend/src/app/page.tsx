@@ -30,7 +30,6 @@ export default function DashboardPage() {
     isDetecting,
     connectionStatus,
     result,
-    stats,
     error,
     start,
     stop,
@@ -171,11 +170,11 @@ export default function DashboardPage() {
   }, [isDetecting, result]);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 md:px-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 md:px-6">
       <header className="mb-6 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-xl font-semibold text-white">
-            Driver Drowsiness Monitor
+            Real-Time Fatigue Detection
           </h1>
           <p className="mt-0.5 text-sm text-[#8e8e93]">
             Real-time fatigue detection - MediaPipe + CNN
@@ -184,8 +183,8 @@ export default function DashboardPage() {
         <ConnectionStatus status={connectionStatus} />
       </header>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[400px_1fr]">
-        <div className="flex flex-col gap-3">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(560px,1.35fr)_minmax(420px,0.9fr)]">
+        <div className="flex flex-col gap-4">
           <div className="overflow-hidden rounded-xl border border-[#2c2c2e] bg-black">
             <div className="relative aspect-video w-full bg-black">
               <video
@@ -193,7 +192,7 @@ export default function DashboardPage() {
                 autoPlay
                 muted
                 playsInline
-                className="mirror h-full w-full object-cover"
+                className="mirror h-full w-full object-contain"
               />
 
               {!isDetecting && (
@@ -228,7 +227,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <button
               id="btn-start"
               onClick={start}
@@ -265,12 +264,6 @@ export default function DashboardPage() {
                 </span>
               </div>
               <div className="mt-1.5 flex items-center justify-between text-xs text-[#636366]">
-                <span>Last frame</span>
-                <span className="font-mono font-medium text-[#8e8e93]">
-                  #{stats.lastProcessedFrameId ?? "-"}
-                </span>
-              </div>
-              <div className="mt-1.5 flex items-center justify-between text-xs text-[#636366]">
                 <span>Face detected</span>
                 <span
                   className={`font-mono font-medium ${
@@ -284,96 +277,50 @@ export default function DashboardPage() {
           )}
         </div>
 
-        <div className="flex flex-col gap-3">
-          <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <FatigueScore score={result?.fatigue_score ?? null} />
-            <div className="flex items-center justify-center rounded-xl border border-[#2c2c2e] bg-[#1c1c1e]">
+            <div className="flex min-h-[150px] items-center justify-center rounded-xl border border-[#2c2c2e] bg-[#1c1c1e] px-4 py-5">
               <StatusBadge status={result?.status ?? null} />
             </div>
-          </div>
 
-          <EyeStateIndicator
-            eyeClosed={result?.eye_closed ?? null}
-            yawnDetected={result?.yawn_detected ?? false}
-          />
+            <EyeStateIndicator
+              eyeClosed={result?.eye_closed ?? null}
+              yawnDetected={result?.yawn_detected ?? false}
+              mode="eye"
+            />
+            <EyeStateIndicator
+              eyeClosed={result?.eye_closed ?? null}
+              yawnDetected={result?.yawn_detected ?? false}
+              mode="yawn"
+            />
+          </div>
 
           <div className="flex items-center gap-3">
             <div className="h-px flex-1 bg-[#2c2c2e]" />
             <span className="text-[10px] font-medium uppercase tracking-widest text-[#48484a]">
-              Live Metrics
+              Fatigue Indicators
             </span>
             <div className="h-px flex-1 bg-[#2c2c2e]" />
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <MetricCard label="EAR" value={result?.ear ?? null} precision={3} />
-            <MetricCard label="MAR" value={result?.mar ?? null} precision={3} />
-            <MetricCard
-              label="Open Prob."
-              value={result?.open_probability ?? null}
-              precision={3}
-            />
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <MetricCard
               label="PERCLOS"
               value={result?.perclos != null ? result.perclos * 100 : null}
               unit="%"
               precision={1}
             />
-            <MetricCard label="Blinks" value={result?.blink_count ?? null} precision={0} />
             <MetricCard
               label="Blink Rate"
               value={result?.blink_rate ?? null}
               unit="/min"
               precision={1}
             />
-            <MetricCard label="Yawns" value={result?.yawn_count ?? null} precision={0} />
             <MetricCard
-              label="Closed Conf."
-              value={result?.closed_confidence ?? null}
-              precision={3}
-            />
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-[#2c2c2e]" />
-            <span className="text-[10px] font-medium uppercase tracking-widest text-[#48484a]">
-              Realtime Pipeline
-            </span>
-            <div className="h-px flex-1 bg-[#2c2c2e]" />
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <MetricCard
-              label="RT Latency"
-              value={stats.roundTripLatencyMs}
-              unit="ms"
+              label="Yawn Count"
+              value={result?.yawn_count ?? null}
               precision={0}
-            />
-            <MetricCard
-              label="Backend"
-              value={stats.backendProcessingMs}
-              unit="ms"
-              precision={0}
-            />
-            <MetricCard
-              label="Sent"
-              value={stats.framesSent}
-              precision={0}
-            />
-            <MetricCard
-              label="Skipped"
-              value={stats.framesSkipped}
-              precision={0}
-            />
-            <MetricCard
-              label="Frame ID"
-              value={stats.lastProcessedFrameId}
-              precision={0}
-            />
-            <MetricCard
-              label="Result FPS"
-              value={stats.currentFps}
-              precision={1}
             />
           </div>
 

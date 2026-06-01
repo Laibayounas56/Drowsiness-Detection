@@ -9,8 +9,8 @@ function getScoreColor(score: number): string {
 }
 
 function getScoreLabel(score: number): string {
-  if (score >= 70) return "Critical";
-  if (score >= 40) return "Alert";
+  if (score >= 70) return "High";
+  if (score >= 40) return "Elevated";
   return "Normal";
 }
 
@@ -26,7 +26,7 @@ export default function FatigueScore({ score }: FatigueScoreProps) {
   const dash = (percentage / 100) * circumference;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-1 rounded-xl border border-[#2c2c2e] bg-[#1c1c1e] py-4">
+    <div className="flex min-h-[150px] flex-col items-center justify-center gap-1 rounded-xl border border-[#2c2c2e] bg-[#1c1c1e] px-4 py-5">
       <p className="text-[10px] font-medium uppercase tracking-widest text-[#636366]">
         Fatigue Score
       </p>

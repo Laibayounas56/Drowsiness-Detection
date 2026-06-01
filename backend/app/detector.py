@@ -24,6 +24,8 @@ from .config import (
     ALERT_RECOVERY_THRESHOLD,
     ALERT_THRESHOLD,
     BLINK_COOLDOWN_FRAMES,
+    BLINK_MAX_DURATION_SECONDS,
+    BLINK_MIN_CLOSED_FRAMES,
     CRITICAL_MIN_HOLD_FRAMES,
     CRITICAL_RECOVERY_THRESHOLD,
     CRITICAL_THRESHOLD,
@@ -39,7 +41,6 @@ from .config import (
     EAR_CLOSED_FALLBACK,
     EAR_CLOSED_MAX,
     EAR_CLOSED_MIN,
-    EAR_CONSEC_MIN,
     EAR_CLOSED_RATIO,
     EAR_MIN_GAP,
     EMA_ALPHA,
@@ -505,6 +506,7 @@ class DrowsinessDetector:
         self._closed_frames = 0
         self._open_frames = 0
         self._in_blink = False
+        self._blink_started_at: float | None = None
         self._blink_cooldown = 0
 
         self._yawn_frames = 0
@@ -569,22 +571,47 @@ class DrowsinessDetector:
         return float(np.mean(values))
 
     def _update_blink(self, eye_closed: bool) -> Tuple[bool, bool]:
+        now = time.monotonic()
+
         if self._blink_cooldown > 0:
             self._blink_cooldown -= 1
 
         eye_closure_started = eye_closed and self._closed_frames == 0
 
         if eye_closed:
+            was_open = self._open_frames > 0
             self._closed_frames += 1
             self._open_frames = 0
-            if not self._in_blink and self._closed_frames >= EAR_CONSEC_MIN:
+            if (
+                not self._in_blink
+                and self._blink_cooldown == 0
+                and was_open
+                and self._closed_frames >= BLINK_MIN_CLOSED_FRAMES
+            ):
                 self._in_blink = True
+                self._blink_started_at = now
             return eye_closure_started, False
 
+        closed_frames = self._closed_frames
+        blink_duration = (
+            now - self._blink_started_at
+            if self._blink_started_at is not None
+            else None
+        )
         self._open_frames += 1
         self._closed_frames = 0
-        if self._in_blink and self._blink_cooldown == 0:
-            self._in_blink = False
+        blink_occurred = (
+            self._in_blink
+            and self._blink_cooldown == 0
+            and closed_frames >= BLINK_MIN_CLOSED_FRAMES
+            and blink_duration is not None
+            and blink_duration <= BLINK_MAX_DURATION_SECONDS
+        )
+
+        self._in_blink = False
+        self._blink_started_at = None
+
+        if blink_occurred:
             self._blink_cooldown = BLINK_COOLDOWN_FRAMES
             return False, True
 

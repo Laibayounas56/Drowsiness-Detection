@@ -16,13 +16,13 @@ const CONFIG: Record<
     pulse: false,
   },
   ALERT: {
-    label: "Alert",
+    label: "Elevated",
     dot:   "bg-[#ff9f0a]",
     badge: "bg-[#ff9f0a]/10 text-[#ff9f0a] ring-[#ff9f0a]/30",
     pulse: false,
   },
   CRITICAL: {
-    label: "Critical",
+    label: "High Fatigue",
     dot:   "bg-[#ff3b30]",
     badge: "bg-[#ff3b30]/10 text-[#ff3b30] ring-[#ff3b30]/30",
     pulse: true,

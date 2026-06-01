@@ -1,6 +1,6 @@
-# Driver Drowsiness Detection System
+# Real-Time Fatigue Detection System
 
-Production-quality local prototype for real-time driver drowsiness detection.
+Production-quality local prototype for real-time fatigue monitoring.
 The browser captures webcam frames, sends compressed JPEGs to FastAPI over a
 WebSocket, and the backend combines MediaPipe face landmarks with a trained
 eye-state CNN.
@@ -161,18 +161,22 @@ Sliding-window score:
 
 | Component | Weight |
 | --- | --- |
-| PERCLOS | 40% |
-| Blink abnormality | 20% |
-| Yawn frequency | 25% |
-| CNN closed-eye confidence | 15% |
+| PERCLOS | 38% |
+| Yawn frequency | 18% |
+| Recent yawn frequency | 10% |
+| Eye-closure frequency | 14% |
+| Blink-rate abnormality | 10% |
+| CNN closed-eye confidence | 10% |
+
+The score also applies smoothing, status hysteresis, and an added sustained-eye-closure bonus for prolonged closure.
 
 Statuses:
 
 | Status | Score |
 | --- | --- |
-| `NORMAL` | `< 40` |
-| `ALERT` | `40 <= score < 70` |
-| `CRITICAL` | `>= 70` |
+| `NORMAL` | below alert threshold |
+| `ALERT` | sustained elevated fatigue score |
+| `CRITICAL` | sustained high fatigue score |
 | `NO_FACE` | no face detected |
 
 ## Project Structure
