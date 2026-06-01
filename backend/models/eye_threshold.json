@@ -1,0 +1,7 @@
+{
+  "threshold": 0.73,
+  "closed_precision": 0.9784929356357928,
+  "closed_recall": 0.9906230133502861,
+  "closed_fbeta": 0.9881729976534227,
+  "accuracy": 0.9846093443266588
+}

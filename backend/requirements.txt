@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+tensorflow==2.16.1
+opencv-python-headless==4.10.0.84
+mediapipe==0.10.14
+numpy<2
+pillow
+pydantic
+python-multipart
