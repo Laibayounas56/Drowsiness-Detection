@@ -5,7 +5,7 @@ The browser captures webcam frames, sends compressed JPEGs to FastAPI over a
 WebSocket, and the backend combines MediaPipe face landmarks with a trained
 eye-state CNN.
 
-No model training, fake detections, database, auth, or external APIs are used.
+No fake detections, database, auth, or external APIs are used.
 
 ## Architecture
 
