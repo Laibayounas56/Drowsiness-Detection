@@ -174,10 +174,10 @@ export default function DashboardPage() {
       <header className="mb-6 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-xl font-semibold text-white">
-            Real-Time Fatigue Detection
+            Real-Time Fatigue & Drowsiness Detection
           </h1>
           <p className="mt-0.5 text-sm text-[#8e8e93]">
-            Real-time fatigue detection - MediaPipe + CNN
+            ML-powered fatigue monitoring using MediaPipe Face Mesh and CNN
           </p>
         </div>
         <ConnectionStatus status={connectionStatus} />

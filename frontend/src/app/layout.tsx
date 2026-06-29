@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Real-Time Fatigue Detection",
+  title: "Real-Time Fatigue & Drowsiness Detection",
   description:
-    "Real-time fatigue monitoring using MediaPipe Face Mesh and a CNN eye-state classifier.",
+    "ML-powered fatigue monitoring using MediaPipe Face Mesh and CNN.",
 };
 
 export default function RootLayout({

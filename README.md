@@ -1,6 +1,6 @@
-# Real-Time Fatigue Detection System
+# Real-Time Fatigue & Drowsiness Detection System
 
-Production-quality local prototype for real-time fatigue monitoring.
+Production-quality local prototype for ML-powered fatigue and drowsiness monitoring.
 The browser captures webcam frames, sends compressed JPEGs to FastAPI over a
 WebSocket, and the backend combines MediaPipe face landmarks with a trained
 eye-state CNN.
